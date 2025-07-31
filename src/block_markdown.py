@@ -12,20 +12,20 @@ class BlockType(Enum):
     ORDERED_LIST = "ordered_list"
 
 def markdown_to_blocks(markdown):
-    blocks = markdown.split("\n\n")
+    raw_blocks = markdown.split("\n\n")
 
-    result = []
+    processed_blocks = []
 
-    for block in blocks:
+    for block in raw_blocks:
 
         if block == "":
             continue
         
         block = block.strip()
 
-        result.append(block)
+        processed_blocks.append(block)
 
-    return result
+    return processed_blocks
 
 def block_to_block_type(markdown_block):
 
@@ -35,10 +35,7 @@ def block_to_block_type(markdown_block):
         return BlockType.HEADING
     
     if len(lines) > 1:
-        if lines[0].startswith("```") and lines[-1].endswith("```"):
-            return BlockType.CODE
-    else:
-        if markdown_block.startswith("```") and markdown_block.endswith("```"):
+        if (lines[0].startswith("```") and lines[-1].endswith("```")) or (markdown_block.startswith("```") and markdown_block.endswith("```")):
             return BlockType.CODE
     
     if markdown_block.startswith(">"):
